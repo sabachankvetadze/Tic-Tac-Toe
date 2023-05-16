@@ -189,6 +189,9 @@ border: none;
   box-shadow: inset 0px -8px 0px #10212A;
    border-radius: 10px;
    background-color: var(--bg);
+   display: flex;
+   justify-content: center;
+   align-items: center;
 }
 .statistics{
   margin-top: 24px;
@@ -226,3 +229,22 @@ border: none;
   letter-spacing: 1.25px;
   
 }
+.xHover:hover{
+background-image: url(./assets/icon-x-outline.svg);
+background-repeat: no-repeat;
+background-size: 40px 40px;
+background-position: center;
+}
+.oHover:hover{
+  background-image: url(./assets/icon-o-outline.svg);
+  background-repeat: no-repeat;
+  background-size: 40px 40px;
+  background-position: center;
+  }
+
+.playIcons{
+width:40px;
+height: 40px;
+
+
+} 

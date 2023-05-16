@@ -7,9 +7,33 @@ let player1 = "x"
 let mode = "cpu"
 
 let turn = "x"
-let freeButton = [0,1,2,3,4,5,6,7,8]
+let freeButtons = [0,1,2,3,4,5,6,7,8]
 let xArray = []
 let oArray = []
+let winnerCombination = [
+  [0,1,2],
+  [3,4,5],
+  [6,7,8],
+  [0,3,6],
+  [1,4,7],
+  [2,5,8],
+  [0,4,8],
+  [2,4,6],
+]
+
+const onHoverEffects = () => {
+  for(let index = 0; index < freeButtons.length; index++){
+    const playButtonIndex = freeButtons[index]
+    if(turn==="x"){
+      playButton[playButtonIndex].classList.add("xHover")
+      playButton[playButtonIndex].classList.remove("oHover")
+    }else{
+      playButton[playButtonIndex].classList.add("oHover")
+      playButton[playButtonIndex].classList.remove("xHover")
+    }
+  }
+}
+
 
 const activateChoice = (icon) =>{
   if(icon === "x"){
@@ -31,4 +55,5 @@ const startGame = (modeParam) =>{
   board.style.display = "block"
   document.body.style.alignItems = "flex-start"
   mode = modeParam
+  onHoverEffects()
 }
