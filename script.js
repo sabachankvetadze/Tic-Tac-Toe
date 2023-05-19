@@ -1,7 +1,13 @@
 const choiceButtons = document.querySelectorAll(".btn-box");
-const playButtons = document.querySelectorAll(".play-btn")
-const home = document.querySelector("#home")
-const board = document.querySelector("#board")
+const playButtons = document.querySelectorAll(".play-btn");
+const home = document.querySelector("#home");
+const board = document.querySelector("#board");
+const xScoreText = document.querySelector("#x-score-text");
+const oScoreText = document.querySelector("#o-score-text");
+const xScoreEelement = document.querySelector("#x-score");
+const oScoreEelement = document.querySelector("#o-score");
+const turnInfoImage = document.querySelector(".turn-box img")
+
 
 let player1 = "x"
 let mode = "cpu"
@@ -62,6 +68,7 @@ const createClickedFunctions = () => {
     playButtons[index].onclick = (event) => {
       event.target.classList.remove("xHover");
       event.target.classList.remove("oHover");
+
       const spliceIndex = freeButtons.indexOf(index);
       freeButtons.splice(spliceIndex, 1);
 
@@ -71,17 +78,21 @@ const createClickedFunctions = () => {
         icon.src = "./assets/icon-x.svg";
         event.target.append(icon);
         xArray.push(index);
-    
         turn = "o";
+        turnInfoImage.src = "./assets/icon-o-gray.svg";
        
       } else {
         icon.src = "./assets/icon-o.svg";
         event.target.append(icon);
         turn = "x";
+        turnInfoImage.src = "./assets/icon-x-gray.svg";
   
       }
+      onHoverEffects()
+      event.target.onclick = null
     };
   }
+  
 };
 
 const startGame = (modeParam) =>{
@@ -91,5 +102,23 @@ const startGame = (modeParam) =>{
   mode = modeParam
   onHoverEffects()
   createClickedFunctions()
+  if(modeParam === "player"){
+    if( player1 === "x"){
+      xScoreText.textContent = "X (P1)"
+      oScoreText.textContent = "O (P2)"
+    }else{
+      xScoreText.textContent = "X (P2)"
+      oScoreText.textContent = "O (P1)"
+    }
+  }else{
+    if( player1 === "x"){
+    xScoreText.textContent = "X (YOU)"
+    oScoreText.textContent = "O (CPU)"
+  }else{
+    xScoreText.textContent = "X (CPU)"
+    oScoreText.textContent = "O (You)"
+  }
+
+  }
  
 }
