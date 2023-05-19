@@ -1,5 +1,5 @@
 const choiceButtons = document.querySelectorAll(".btn-box");
-const playButton = document.querySelectorAll(".play-btn")
+const playButtons = document.querySelectorAll(".play-btn")
 const home = document.querySelector("#home")
 const board = document.querySelector("#board")
 
@@ -21,18 +21,10 @@ let winnerCombination = [
   [2,4,6],
 ]
 
-const onHoverEffects = () => {
-  for(let index = 0; index < freeButtons.length; index++){
-    const playButtonIndex = freeButtons[index]
-    if(turn==="x"){
-      playButton[playButtonIndex].classList.add("xHover")
-      playButton[playButtonIndex].classList.remove("oHover")
-    }else{
-      playButton[playButtonIndex].classList.add("oHover")
-      playButton[playButtonIndex].classList.remove("xHover")
-    }
-  }
-}
+
+
+
+
 
 
 const activateChoice = (icon) =>{
@@ -50,10 +42,54 @@ const activateChoice = (icon) =>{
 
 }
 
+
+const onHoverEffects = () => {
+  for(let index = 0; index < freeButtons.length; index++){
+    const playButtonIndex = freeButtons[index]
+    if(turn === "x"){
+      playButtons[playButtonIndex].classList.add("xHover")
+      playButtons[playButtonIndex].classList.remove("oHover")
+    }else{
+      playButtons[playButtonIndex].classList.add("oHover")
+      playButtons[playButtonIndex].classList.remove("xHover")
+    }
+  }
+}
+
+const createClickedFunctions = () => {
+  for (let index = 0; index < playButtons.length; index++) {
+ 
+    playButtons[index].onclick = (event) => {
+      event.target.classList.remove("xHover");
+      event.target.classList.remove("oHover");
+      const spliceIndex = freeButtons.indexOf(index);
+      freeButtons.splice(spliceIndex, 1);
+
+      const icon = document.createElement("img");
+      icon.classList.add("play-icon");
+      if (turn === "x") {
+        icon.src = "./assets/icon-x.svg";
+        event.target.append(icon);
+        xArray.push(index);
+    
+        turn = "o";
+       
+      } else {
+        icon.src = "./assets/icon-o.svg";
+        event.target.append(icon);
+        turn = "x";
+  
+      }
+    };
+  }
+};
+
 const startGame = (modeParam) =>{
   home.style.display =  "none"
   board.style.display = "block"
   document.body.style.alignItems = "flex-start"
   mode = modeParam
   onHoverEffects()
+  createClickedFunctions()
+ 
 }
