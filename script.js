@@ -6,7 +6,12 @@ const xScoreText = document.querySelector("#x-score-text");
 const oScoreText = document.querySelector("#o-score-text");
 const xScoreEelement = document.querySelector("#x-score");
 const oScoreEelement = document.querySelector("#o-score");
-const turnInfoImage = document.querySelector(".turn-box img")
+const turnInfoImage = document.querySelector(".turn-box img");
+
+const modal = document.querySelector("#modal")
+const modalInfoText = document.querySelector(".result-info-text");
+const modalIcon = document.querySelector(".modal-box img")
+const modalResultText = document.querySelector(".result-text")
 
 
 let player1 = "x"
@@ -28,11 +33,6 @@ let winnerCombination = [
 ]
 
 
-
-
-
-
-
 const activateChoice = (icon) =>{
   if(icon === "x"){
     choiceButtons[0].classList.add("active");
@@ -48,6 +48,18 @@ const activateChoice = (icon) =>{
 
 }
 
+const checkXwin = () =>{
+  return winnerCombination.find (combination => combination.every(button => xArray.includes(button)))
+}
+
+const onWinX = () => {
+  modal.style.display ="flex"
+  if(player1 === "x"){
+    modalInfoText.textContent = "YOU WIN!"
+  }else{
+    modalInfoText.textContent = "OH NO YOU LOST..."
+  }
+}
 
 const onHoverEffects = () => {
   for(let index = 0; index < freeButtons.length; index++){
@@ -78,12 +90,18 @@ const createClickedFunctions = () => {
         icon.src = "./assets/icon-x.svg";
         event.target.append(icon);
         xArray.push(index);
+        const win = checkXwin()
+        if(win){
+          onWinX()
+          return
+        }
         turn = "o";
         turnInfoImage.src = "./assets/icon-o-gray.svg";
        
       } else {
         icon.src = "./assets/icon-o.svg";
         event.target.append(icon);
+        oArray.push(index);
         turn = "x";
         turnInfoImage.src = "./assets/icon-x-gray.svg";
   
