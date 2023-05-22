@@ -6,21 +6,26 @@ const xScoreText = document.querySelector("#x-score-text");
 const oScoreText = document.querySelector("#o-score-text");
 const xScoreEelement = document.querySelector("#x-score");
 const oScoreEelement = document.querySelector("#o-score");
+const tieScoreElement = document.querySelector("#tie-score")
 const turnInfoImage = document.querySelector(".turn-box img");
-
 const modal = document.querySelector("#modal")
+const modalTie = document.querySelector("#modal-tie")
+const modalRestart = document.querySelector("#modal-restart")
 const modalInfoText = document.querySelector(".result-info-text");
 const modalIcon = document.querySelector(".modal-box img")
 const modalResultText = document.querySelector(".result-text")
 
 
-let player1 = "x"
-let mode = "cpu"
+let player1 = "x";
+let mode = "cpu";
+let turn = "x";
+let freeButtons = [0,1,2,3,4,5,6,7,8];
+let xArray = [];
+let oArray = [];
+let xScore = 0;
+let tieScore = 0;
+let oScore = 0;
 
-let turn = "x"
-let freeButtons = [0,1,2,3,4,5,6,7,8]
-let xArray = []
-let oArray = []
 let winnerCombination = [
   [0,1,2],
   [3,4,5],
@@ -30,7 +35,7 @@ let winnerCombination = [
   [2,5,8],
   [0,4,8],
   [2,4,6],
-]
+];
 
 
 const activateChoice = (icon) =>{
@@ -51,14 +56,52 @@ const activateChoice = (icon) =>{
 const checkXwin = () =>{
   return winnerCombination.find (combination => combination.every(button => xArray.includes(button)))
 }
+const checkOwin = () =>{
+  return winnerCombination.find (combination => combination.every(button => oArray.includes(button)))
+}
 
 const onWinX = () => {
   modal.style.display ="flex"
+  modalIcon.src = "./assets/icon-x.svg";
+  modalResultText.style.color = " #31C3BD"
+  xScore++
+  xScoreEelement.textContent = xScore
   if(player1 === "x"){
     modalInfoText.textContent = "YOU WIN!"
   }else{
     modalInfoText.textContent = "OH NO YOU LOST..."
   }
+}
+const onWinO = () => {
+  modal.style.display ="flex"
+  modalIcon.src = "./assets/icon-o.svg";
+  modalResultText.style.color = " #F2B137"
+  oScore++
+  oScoreEelement.textContent = oScore
+  if(player1 === "o"){
+    modalInfoText.textContent = "YOU WIN!"
+  }else{
+    modalInfoText.textContent = "OH NO YOU LOST..."
+  }
+}
+
+const winningStyle = (array) => {
+  playButtons[array[0]].firstElementChild.src = "./assets/icon-x-win.svg"
+      if(turn === "x"){
+        playButtons[array[0]].style.background = "#31C3BD"
+        playButtons[array[0]].firstElementChild.src = "./assets/icon-x-win.svg"
+        playButtons[array[1]].style.background = "#31C3BD"
+        playButtons[array[1]].firstElementChild.src = "./assets/icon-x-win.svg"
+        playButtons[array[2]].style.background = "#31C3BD"
+        playButtons[array[2]].firstElementChild.src = "./assets/icon-x-win.svg"
+      }else{
+        playButtons[array[0]].style.background = "#F2B137"
+        playButtons[array[0]].firstElementChild.src = "./assets/icon-o-win.svg"
+        playButtons[array[1]].style.background = "#F2B137"
+        playButtons[array[1]].firstElementChild.src = "./assets/icon-o-win.svg"
+        playButtons[array[2]].style.background = "#F2B137"
+        playButtons[array[2]].firstElementChild.src = "./assets/icon-o-win.svg"
+      }
 }
 
 const onHoverEffects = () => {
@@ -76,11 +119,11 @@ const onHoverEffects = () => {
 
 const createClickedFunctions = () => {
   for (let index = 0; index < playButtons.length; index++) {
- 
+    playButtons[index].style.background = "#1f3641";
+    playButtons[index].innerHTML = "";
     playButtons[index].onclick = (event) => {
       event.target.classList.remove("xHover");
       event.target.classList.remove("oHover");
-
       const spliceIndex = freeButtons.indexOf(index);
       freeButtons.splice(spliceIndex, 1);
 
@@ -90,27 +133,42 @@ const createClickedFunctions = () => {
         icon.src = "./assets/icon-x.svg";
         event.target.append(icon);
         xArray.push(index);
-        const win = checkXwin()
-        if(win){
-          onWinX()
-          return
+        const win = checkXwin();
+        if (win) {
+          onWinX();
+          winningStyle(win);
+          return;
+        }
+        if (xArray.length === 5) {
+          modalTie.style.display = "flex";
+          tieScore++;
+          tieScoreElement.textContent = tieScore;
         }
         turn = "o";
         turnInfoImage.src = "./assets/icon-o-gray.svg";
-       
       } else {
         icon.src = "./assets/icon-o.svg";
         event.target.append(icon);
         oArray.push(index);
+        const win = checkOwin();
+        if (win) {
+          onWinO();
+          winningStyle(win);
+          return;
+        }
+        if(xArray.length === 5){
+          modalTie.style.display = "flex"
+          tieScore++
+        }
         turn = "x";
         turnInfoImage.src = "./assets/icon-x-gray.svg";
-  
+        
       }
-      onHoverEffects()
-      event.target.onclick = null
+      onHoverEffects();
+
+      event.target.onclick = null;
     };
   }
-  
 };
 
 const startGame = (modeParam) =>{
@@ -140,3 +198,57 @@ const startGame = (modeParam) =>{
   }
  
 }
+
+const reset = () =>{
+  player1 = "x";
+mode = "cpu";
+turn = "x";
+freeButtons = [0,1,2,3,4,5,6,7,8];
+xArray = [];
+oArray = [];
+modal.style.display ="none"
+modalTie.style.display ="none"
+
+
+}
+
+const quit = () => {
+reset();
+xScore = 0;
+tieScore = 0;
+oScore = 0;
+board.style.display = "none"
+home.style.display ="flex"
+oScoreEelement.textContent = 0
+xScoreEelement.textContent = 0
+tieScoreElement = 0
+}
+
+
+
+
+const nextRound = () => {
+  reset();
+  startGame(mode)
+  
+}
+
+const openRestartModal = () => {
+      modalRestart.style.display = "flex"
+}
+
+const closeModal = () => {
+  modalRestart.style.display = "none"
+}
+
+const restartFc = () =>{
+  modalRestart.style.display = "none"
+  nextRound()
+  xScore = 0;
+tieScore = 0;
+oScore = 0;
+oScoreEelement.textContent = 0
+xScoreEelement.textContent = 0
+tieScoreElement.textContent = 0
+}
+

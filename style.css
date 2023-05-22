@@ -261,6 +261,18 @@ height: 40px;
   z-index: 100;
 
 }
+#modal-tie, #modal-restart{
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
 .modal-box{
   width: 100%;
   padding: 40px 48px 48px 48px;
